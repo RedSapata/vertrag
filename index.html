@@ -618,7 +618,66 @@
     document.getElementById('renterSignDate').value = 'Linz, ' + todayStr;
 
     // 6. Vertragsdaten per ?id=RS-2026-... von Google Apps Script abrufen
-    (async function loadBookingFromApi() {
+    (async function loadBookingFromApi() // Bearbeitungsmodus (?mode=edit) aktivieren
+const urlParams = new URLSearchParams(window.location.search);
+const currentBookingId = urlParams.get('id');
+const isEditMode = urlParams.get('mode') === 'edit';
+
+if (isEditMode && currentBookingId) {
+  document.getElementById('staffEditBanner').classList.remove('hidden');
+}
+
+document.getElementById('saveAndCreateDraftBtn').addEventListener('click', async function () {
+  const btn = this;
+  btn.disabled = true;
+  btn.textContent = 'Wird gespeichert & Entwurf erstellt...';
+
+  const checkedRooms = [...document.querySelectorAll('input[name="rooms"]:checked')].map(cb => cb.value);
+  const spaceDetails = document.getElementById('spaceDetails').value.trim();
+  const selectedCat = document.querySelector('input[name="cancellationType"]:checked');
+
+  const updatedFormData = {
+    renterOrg: document.getElementById('renterOrg').value.trim(),
+    renterName: document.getElementById('contactPerson').value.trim(),
+    renterEmail: document.getElementById('renterEmail').value.trim(),
+    renterPhone: document.getElementById('renterPhone').value.trim(),
+    renterAddress: document.getElementById('billingAddress').value.trim(),
+    purpose: document.getElementById('purpose').value.trim(),
+    pax: document.getElementById('maxPax').value.trim(),
+    dateTime: document.getElementById('dateTime').value.trim(),
+    rooms: spaceDetails || checkedRooms.join(', '),
+    netPrice: document.getElementById('netPrice').value.trim(),
+    vatRate: document.getElementById('vatRate').value,
+    paymentTerms: document.getElementById('paymentTerms').value.trim(),
+    customTerms: document.getElementById('customTerms').value.trim(),
+    customCancellation: document.getElementById('customCancellationNote').value.trim(),
+    category: selectedCat ? selectedCat.value : 'veranstaltung',
+    redsapataRep: document.getElementById('redsapataRep').value.trim()
+  };
+
+  try {
+    const response = await fetch(APPS_SCRIPT_API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        bookingId: currentBookingId,
+        formData: updatedFormData
+      })
+    });
+    const resJson = await response.json();
+    if (resJson.success) {
+      btn.textContent = '✓ Entwurf in Gmail angelegt!';
+      btn.classList.replace('bg-amber-600', 'bg-emerald-700');
+      showToast('Gespeichert! Der E-Mail-Entwurf an den/die Mieter:in liegt jetzt in Gmail bereit.');
+    } else {
+      throw new Error(resJson.error || 'Unbekannter Fehler');
+    }
+  } catch (err) {
+    alert('Fehler beim Speichern: ' + err.message);
+    btn.disabled = false;
+    btn.textContent = '✓ Speichern & E-Mail-Entwurf erstellen';
+  }
+});{
       const params = new URLSearchParams(window.location.search);
       const bookingId = params.get('id');
       if (!bookingId || APPS_SCRIPT_API_URL.includes('DEINE_WEBAPP_ID')) return;
