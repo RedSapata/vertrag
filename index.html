@@ -40,43 +40,98 @@
       color: #92400e;
       border: 1px solid #fde68a;
     }
+
     @media print {
-      @page { size: A4; margin: 14mm 15mm; }
-      body { background: #ffffff !important; color: #000000 !important; font-size: 10pt !important; line-height: 1.4 !important; }
-      .no-print { display: none !important; }
-      .contract-sheet { box-shadow: none !important; border: none !important; margin: 0 !important; padding: 0 !important; max-width: 100% !important; width: 100% !important; }
-      input, textarea, select { border: none !important; border-bottom: 1px solid #a8a29e !important; background: transparent !important; padding-left: 0 !important; padding-right: 0 !important; border-radius: 0 !important; box-shadow: none !important; resize: none !important; }
-      .email-badge { display: none !important; }
-      .print-break-inside-avoid { break-inside: avoid; page-break-inside: avoid; }
-      .signature-canvas { background-image: none !important; border: 1px solid #d6d3d1 !important; }
+      @page {
+        size: A4;
+        margin: 14mm 15mm;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        font-size: 10pt !important;
+        line-height: 1.4 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+      .contract-sheet {
+        box-shadow: none !important;
+        border: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+      }
+      input, textarea, select {
+        border: none !important;
+        border-bottom: 1px solid #a8a29e !important;
+        background: transparent !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        border-radius: 0 !important;
+        box-shadow: none !important;
+        resize: none !important;
+      }
+      .email-badge {
+        display: none !important;
+      }
+      .print-break-inside-avoid {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .signature-canvas {
+        background-image: none !important;
+        border: 1px solid #d6d3d1 !important;
+      }
     }
   </style>
 </head>
 <body class="min-h-screen pb-16">
 
-  <!-- Loading Banner while fetching booking ID -->
-  <div id="loadingBanner" class="no-print hidden bg-amber-50 border-b border-amber-200 text-amber-900 text-xs py-2 px-4 text-center font-medium">
-    ⏳ Vertragsdaten werden geladen...
+  <!-- Toast Banner -->
+  <div id="toast" class="no-print fixed bottom-5 right-5 z-50 hidden max-w-md bg-stone-900 text-white px-4 py-3 rounded-xl shadow-xl border border-stone-700 flex items-center gap-3 text-sm">
+    <span id="toastIcon" class="text-amber-400 font-bold">✓</span>
+    <span id="toastMessage">Aktion erfolgreich ausgeführt.</span>
   </div>
 
   <!-- Top Control Bar -->
   <header class="no-print sticky top-0 z-40 bg-stone-900 text-stone-100 border-b border-stone-800 shadow-lg">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-lg bg-rose-700 flex items-center justify-center font-title-brand font-extrabold text-white text-lg">R</div>
         <div>
           <div class="text-sm font-semibold tracking-tight text-white flex items-center gap-2">
             RedSapata Saalnutzungsvereinbarung
-            <span class="text-[10px] uppercase tracking-wider bg-rose-900/80 text-rose-200 px-2 py-0.5 rounded-full border border-rose-700/60">Digitales Formular</span>
+            <span id="syncStatusBadge" class="text-[10px] uppercase tracking-wider bg-rose-900/80 text-rose-200 px-2 py-0.5 rounded-full border border-rose-700/60">Digitales Formular</span>
           </div>
           <p class="text-xs text-stone-400">Angaben prüfen, unten unterschreiben &amp; als PDF speichern</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2">
+      <div class="flex flex-wrap items-center gap-2">
+        <button type="button" id="toggleParserBtn" class="bg-stone-800 hover:bg-stone-700 text-stone-200 text-xs font-medium px-3 py-2 rounded-lg border border-stone-700 transition">
+          ✉ E-Mail-Text einfügen
+        </button>
         <button type="button" onclick="window.print()" class="bg-rose-700 hover:bg-rose-600 text-white text-xs font-semibold px-4 py-2 rounded-lg shadow transition">
           🖨 Als PDF speichern / drucken
         </button>
+      </div>
+    </div>
+
+    <!-- Optional Raw Email Paste Drawer -->
+    <div id="emailParserDrawer" class="hidden border-t border-stone-700 bg-stone-900/95">
+      <div class="max-w-5xl mx-auto px-4 py-4">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-semibold text-amber-300">E-Mail-Verlauf manuell einfügen &amp; auslesen</h3>
+          <button type="button" id="closeParserBtn" class="text-xs text-stone-400 hover:text-white px-2 py-1">Schließen ✕</button>
+        </div>
+        <textarea id="rawEmailInput" rows="4" class="w-full bg-stone-950 text-stone-100 text-xs font-mono p-3 rounded-lg border border-stone-700 focus:ring-2 focus:ring-amber-500 focus:outline-none" placeholder="E-Mail-Text hier einfügen..."></textarea>
+        <div class="mt-2 flex justify-end">
+          <button type="button" id="parseEmailBtn" class="bg-amber-600 hover:bg-amber-500 text-white text-xs font-semibold px-4 py-2 rounded-lg">
+            Daten übernehmen
+          </button>
+        </div>
       </div>
     </div>
   </header>
@@ -129,4 +184,449 @@
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <label for="renterOrg" class="block text-
+            <label for="renterOrg" class="block text-xs font-semibold text-stone-700 mb-1">Mieter:in / Verein / Institution *</label>
+            <input type="text" id="renterOrg" required class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" placeholder="Name des Vereins / der Firma / Privatperson" />
+          </div>
+
+          <div>
+            <label for="contactPerson" class="block text-xs font-semibold text-stone-700 mb-1">Ansprechperson (Vor- &amp; Nachname) *</label>
+            <input type="text" id="contactPerson" required class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" placeholder="Vor- und Nachname" />
+          </div>
+
+          <div>
+            <label for="renterEmail" class="block text-xs font-semibold text-stone-700 mb-1">E-Mail-Adresse *</label>
+            <input type="email" id="renterEmail" required class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" placeholder="kontakt@beispiel.at" />
+          </div>
+
+          <div>
+            <label for="renterPhone" class="block text-xs font-semibold text-stone-700 mb-1">Telefonnummer</label>
+            <input type="text" id="renterPhone" class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" placeholder="+43 ..." />
+          </div>
+
+          <div class="md:col-span-2">
+            <label for="billingAddress" class="block text-xs font-semibold text-stone-700 mb-1">Rechnungsadresse (Straße, PLZ, Ort, ggf. UID)</label>
+            <input type="text" id="billingAddress" class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" placeholder="Straße Hausnummer, PLZ Ort" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+          <div class="md:col-span-2">
+            <label for="purpose" class="block text-xs font-semibold text-stone-700 mb-1">Zweck der Nutzung (Veranstaltungstitel / Art) *</label>
+            <input type="text" id="purpose" required class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" />
+          </div>
+
+          <div>
+            <label for="maxPax" class="block text-xs font-semibold text-stone-700 mb-1">Max. Personenanzahl (PAX)</label>
+            <input type="text" id="maxPax" class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" />
+          </div>
+
+          <div class="md:col-span-3">
+            <label for="dateTime" class="block text-xs font-semibold text-stone-700 mb-1">Datum &amp; Zeitraum der Nutzung (inkl. Auf- und Abbauzeiten) *</label>
+            <input type="text" id="dateTime" required class="w-full text-sm px-3 py-2 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" />
+          </div>
+        </div>
+
+        <!-- Rooms -->
+        <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-stone-700">Ort &amp; gebuchte Räumlichkeiten</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 text-xs">
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-stone-200">
+              <input type="checkbox" name="rooms" value="Studio 1" class="rounded text-rose-600" />
+              <span>Sonnenstein Loft – Studio 1</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-stone-200">
+              <input type="checkbox" name="rooms" value="Studio 2" class="rounded text-rose-600" />
+              <span>Sonnenstein Loft – Studio 2</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-stone-200">
+              <input type="checkbox" name="rooms" value="Studio 3" class="rounded text-rose-600" />
+              <span>Sonnenstein Loft – Studio 3</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-stone-200">
+              <input type="checkbox" name="rooms" value="Gesamtstockwerk" class="rounded text-rose-600" />
+              <span>Loft – Gesamtstockwerk</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-stone-200">
+              <input type="checkbox" name="rooms" value="AUBERGiNE" class="rounded text-rose-600" />
+              <span>AUBERGiNE (Güntherstr. 1)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 bg-white rounded-lg border border-stone-200">
+              <input type="checkbox" name="rooms" value="Communitybereich" class="rounded text-rose-600" />
+              <span>Communitybereich / Küche / Terrasse</span>
+            </label>
+          </div>
+
+          <div>
+            <label for="spaceDetails" class="block text-xs font-medium text-stone-600 mb-1">Präzisierung Räume / Nebenräume:</label>
+            <input type="text" id="spaceDetails" class="w-full text-sm px-3 py-1.5 bg-white rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" />
+          </div>
+          <p class="text-[11px] text-stone-500 leading-snug">
+            Hinweis: Umliegende Grasflächen gehören zum Park der Stadt Linz und sind öffentlich zugänglich; um Rücksichtnahme auf Natur und Nachbarn wird gebeten. Stehtische/Tische, Hocker und Stühle können nach Absprache ausgeborgt werden (Transport ist selbst zu organisieren).
+          </p>
+        </div>
+
+        <!-- Pricing -->
+        <div class="bg-amber-50/50 p-4 rounded-xl border border-amber-200/80 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold uppercase tracking-wider text-stone-800">Mietpreis &amp; Abrechnung</span>
+            <span class="email-badge">Aus E-Mail kalkuliert</span>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div>
+              <label for="netPrice" class="block text-xs font-semibold text-stone-700 mb-1">Mietpreis Netto (€)</label>
+              <input type="number" step="0.01" id="netPrice" class="w-full text-sm font-mono px-3 py-2 bg-white rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" placeholder="0.00" />
+            </div>
+
+            <div>
+              <label for="vatRate" class="block text-xs font-semibold text-stone-700 mb-1">Umsatzsteuer (USt.)</label>
+              <select id="vatRate" class="w-full text-sm px-3 py-2 bg-white rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none">
+                <option value="20">20 % USt. (Standard Raumvermietung)</option>
+                <option value="10" selected>10 % USt. (Kultur / Hosting ermäßigt)</option>
+                <option value="0">0 % (Kleinunternehmer / Kulturverein)</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="grossPrice" class="block text-xs font-semibold text-stone-700 mb-1">Gesamtpreis Brutto (€)</label>
+              <input type="text" id="grossPrice" readonly class="w-full text-sm font-mono font-bold text-stone-900 px-3 py-2 bg-stone-100 rounded-lg border border-stone-300" placeholder="0,00 €" />
+            </div>
+          </div>
+
+          <div>
+            <label for="paymentTerms" class="block text-xs font-semibold text-stone-700 mb-1">Preisdetails &amp; Zahlungsmodus (lt. E-Mail-Vereinbarung)</label>
+            <input type="text" id="paymentTerms" class="w-full text-sm px-3 py-1.5 bg-white rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" />
+          </div>
+        </div>
+
+        <!-- Custom Email Terms -->
+        <div class="border-l-4 border-amber-500 bg-stone-50 p-4 rounded-r-xl space-y-3">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <h3 class="text-xs sm:text-sm font-bold text-stone-900">Individuelle Absprachen aus dem E-Mail-Verlauf</h3>
+            <span class="email-badge">Vorrangig vor allgemeinen Bestimmungen</span>
+          </div>
+
+          <div>
+            <label for="customTerms" class="block text-xs font-semibold text-stone-700 mb-1">Vereinbarte Ausstattung, Logistik &amp; Sonderkonditionen:</label>
+            <textarea id="customTerms" rows="3" class="w-full text-xs sm:text-sm px-3 py-2 bg-white rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section class="space-y-4 print-break-inside-avoid">
+        <div class="border-b border-stone-200 pb-2">
+          <h2 class="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs flex items-center justify-center font-bold">2</span>
+            Vereinbarte Mietkonditionen &amp; Stornobedingungen
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="einzeltermin" class="mt-0.5 text-rose-600" />
+            <div>
+              <div class="font-bold text-stone-900">Einzelterminbuchung (bis zu 4 Std.)</div>
+              <p class="text-stone-600 mt-0.5">Über 1 Woche vor Termin: kostenlos · 1 Woche bis 72 Std. davor: 75 % · unter 72 Std.: 100 %.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="veranstaltung" class="mt-0.5 text-rose-600" checked />
+            <div>
+              <div class="font-bold text-stone-900">Veranstaltungen (Ganztagesbuchung &gt; 4 Std.)</div>
+              <p class="text-stone-600 mt-0.5">Bis 6 Wochen davor: kostenlos · bis 4 Wochen: 50 % · bis 2 Wochen: 75 % · unter 2 Wochen: 100 %.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="serientermin" class="mt-0.5 text-rose-600" />
+            <div>
+              <div class="font-bold text-stone-900">Serientermine (regelmäßige Vermietung)</div>
+              <p class="text-stone-600 mt-0.5">+ 2 Wochen zu den Fristen „Veranstaltungen“; Einzelterminstorno: 50 % bis zu 24 Std. davor.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="custom" class="mt-0.5 text-rose-600" />
+            <div>
+              <div class="font-bold text-stone-900">Individuelle Stornoregelung (lt. E-Mail)</div>
+              <p class="text-stone-600 mt-0.5">Abweichende Regelung gemäß untenstehender E-Mail-Vereinbarung.</p>
+            </div>
+          </label>
+        </div>
+
+        <div>
+          <label for="customCancellationNote" class="block text-xs font-semibold text-stone-700 mb-1">Abweichende Storno- / Zusatzvereinbarung (optional)</label>
+          <input type="text" id="customCancellationNote" class="w-full text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" />
+        </div>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section class="space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-2">
+          <h2 class="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs flex items-center justify-center font-bold">3</span>
+            Bedingungen, Vereinbarungen &amp; Hausordnung (Stand Jänner 2023)
+          </h2>
+          <button type="button" id="toggleClausesBtn" class="no-print text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">
+            Volltext einblenden ▼
+          </button>
+        </div>
+
+        <div class="text-xs text-stone-600 bg-stone-50 p-3.5 rounded-xl border border-stone-200/80 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5">
+          <div>• <strong>A–B) Sorgfalt &amp; Reinigung:</strong> Besenreine/gereinigte Übergabe wie übernommen; eigene Müllentsorgung.</div>
+          <div>• <strong>C) Rauchverbot:</strong> Striktes Rauchverbot im Gebäude (Terrasse mit eigenem Aschenbecher).</div>
+          <div>• <strong>D–E) Genehmigungen &amp; Haftung:</strong> AKM, Behörden &amp; Versicherungsschutz obliegen dem/der Nutzer:in.</div>
+          <div>• <strong>F–I) Raumschutz &amp; Freistellung:</strong> Keine Veränderungen an Wand/Decke/Elektrik; Tanzböden ohne Straßenschuhe/Glas.</div>
+          <div>• <strong>J–I) Logo &amp; One-Voice-Policy:</strong> Kein RedSapata-Logo ohne Kooperation; positive gegenseitige Darstellung.</div>
+          <div>• <strong>Hausordnung (1–12):</strong> Ab 22:00 Uhr Fenster/Vorhänge schließen; ab 50 PAX Ordnungsdienst; kein Parken im Hof.</div>
+        </div>
+
+        <div id="clausesFullText" class="hidden text-[11.5px] text-stone-700 bg-stone-50/50 p-4 rounded-xl border border-stone-200 space-y-4 leading-relaxed">
+          <div class="space-y-1.5">
+            <h3 class="font-bold text-stone-900 uppercase tracking-wider text-xs">Bedingungen &amp; Vereinbarungen (A – J)</h3>
+            <p><strong>A)</strong> Der/die Benutzer:in verpflichtet sich, mit den Räumlichkeiten und den überlassenen Ausstattungsmitteln sorgfältig und rücksichtsvoll umzugehen, nur für den angezeigten Zweck zu nutzen, Schäden und Verluste zu vermeiden bzw. sämtliche Beeinträchtigungen an der Nutzungssache anzuzeigen und zu ersetzen.</p>
+            <p><strong>B)</strong> Der/die Benutzer:in übergibt die Räumlichkeiten und Ausstattungen im gereinigten und aufgeräumten Zustand, wie bei der Übernahme vorgefunden. Mitgebrachte Speisen und Getränkebehältnisse müssen selbst entsorgt werden.</p>
+            <p><strong>C)</strong> Innerhalb des Gebäudes ist ausdrückliches Rauchverbot! (Rauchen auf der Terrasse ist erlaubt – hier bitte selber um Aschenbecher kümmern.)</p>
+            <p><strong>D)</strong> Der/die Nutzer:in ist für sämtliche mit dieser Nutzung erforderlich werdenden Genehmigungen und Zulassungen selbst verantwortlich (Gemeinde, Ordnungsamt; Aufführungsgebühren, AKM, Künstlersozialkasse, usw.).</p>
+            <p><strong>E)</strong> Der/die Nutzer:in ist verantwortlich für die Sicherheit seiner Besucher und Gäste. RedSapata gewährt für die private Nutzung keinen Versicherungsschutz, dafür ist der Nutzer selbst verantwortlich.</p>
+            <p><strong>F)</strong> Grobe und für einen längeren Zeitraum bleibende Veränderungen müssen von RedSapata genehmigt werden (Bohren, Fixieren von Gegenständen an Deckenkonstruktion, Austauschen der Bodenbeläge, Bemalen der Wände). Für die Nutzung der Deckenkonstruktion sowie Veränderungen der Saalelektrik ist die Erlaubnis des Haustechnikers einzuholen. Der/die Nutzer:in übernimmt die volle Verantwortung für Schäden durch eigenes Equipment oder unsachgemäße Verwendung.</p>
+            <p><strong>G)</strong> RedSapata übernimmt keine Haftung für liegengebliebene Gegenstände und zwischengelagertes Eigentum der Nutzer:innen.</p>
+            <p><strong>H)</strong> RedSapata kann jederzeit von dieser Vereinbarung Abstand nehmen oder zurücktreten, wenn der/die Nutzer:in seine/ihre Verpflichtungen aus dieser Vereinbarung nicht erfüllt.</p>
+            <p><strong>I)</strong> Die Nutzer:in stellt RedSapata von Ansprüchen Dritter frei, die im Zusammenhang mit der Durchführung der Nutzung geltend gemacht werden.</p>
+            <p><strong>J)</strong> Im Falle von Kooperationen ist das Logo des Vereins in sämtlichen Veröffentlichungen anzuführen. Externe Raumnutzer:innen ohne Kooperationsvereinbarung benennen das Sonnenstein Loft ausschließlich als Austragungsort und nehmen von der Verwendung des Logos Abstand. One-Voice-Policy: Aktivitäten werden nur in beidseitigem Einvernehmen und in positiver gegenseitiger Darstellung nach außen getragen.</p>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-bold text-stone-900 uppercase tracking-wider text-xs">Hausordnung (Stand Jänner 2023)</h3>
+            <p>1. Raum ordentlich hinterlassen · 2. Tanzböden nicht mit Straßenschuhen betreten · 3. Generelles Rauchverbot · 4. Lichter &amp; Musikanlage abschalten, Fenster schließen, Türen verriegeln · 5. Geschirr spülen &amp; zurückstellen · 6. Mülltrennung beachten (Hof bzw. für Aubergine Ecke Hoppichlerstraße/Aubergstraße) · 7. Kein Glas im Tanzraum · 8. Ab 22 Uhr Fenster schließen &amp; Vorhänge zuziehen (Nachtruhe; Polizeieinsatzkosten trägt Veranstalter) · 9. Feuerlöscher &amp; Notausgänge vorab klären · 10. Ab 50 Personen Ordnungsdienst abstellen · 11. Parken im Hof nicht erlaubt · 12. Gesetzliche Maßnahmen einhalten.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Signatures -->
+      <section class="space-y-5 print-break-inside-avoid pt-2">
+        <div class="border-b border-stone-200 pb-2">
+          <h2 class="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs flex items-center justify-center font-bold">4</span>
+            Bestätigung &amp; Unterschriften
+          </h2>
+        </div>
+
+        <div class="space-y-2 text-xs text-stone-700 bg-rose-50/40 p-3.5 rounded-xl border border-rose-200/60">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="acceptTerms" required class="mt-0.5 rounded text-rose-600" />
+            <span>Ich habe die allgemeinen Nutzungsbedingungen, Stornobedingungen und die Hausordnung (Stand Jänner 2023) gelesen und akzeptiere diese verbindlich. *</span>
+          </label>
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="acceptEmailTerms" required class="mt-0.5 rounded text-rose-600" />
+            <span>Die unter Punkt 1 zusammengefassten individuellen Absprachen aus dem E-Mail-Verlauf entsprechen unserer Vereinbarung. *</span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <!-- RedSapata Pre-Authorized Block -->
+          <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-stone-700">Für RedSapata Kulturinitiative</span>
+                <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">✓ Digital freigegeben</span>
+              </div>
+              <div class="h-24 rounded-lg bg-white border border-stone-200 flex flex-col items-center justify-center px-4 text-center">
+                <div class="font-title-brand italic text-xl text-rose-800 tracking-tight">RedSapata Kulturinitiative</div>
+                <div class="text-[11px] text-stone-500 mt-0.5">Elektronisch autorisiert &amp; versendet über office@redsapata.com</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="text-[11px] text-stone-500 block">Ausgestellt durch:</span>
+                <input type="text" id="redsapataRep" value="Ulrike Hager / RedSapata Team" class="w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" />
+              </div>
+              <div>
+                <span class="text-[11px] text-stone-500 block">Ort, Datum:</span>
+                <input type="text" id="redsapataSignDate" class="w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" />
+              </div>
+            </div>
+          </div>
+
+          <!-- Renter Interactive Signature Pad -->
+          <div class="bg-stone-50 p-4 rounded-xl border border-stone-300 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-stone-900">Für Mieter:in / Veranstalter:in *</span>
+                <button type="button" id="clearSignatureBtn" class="no-print text-[11px] text-stone-500 hover:text-rose-700 underline">Löschen</button>
+              </div>
+              <canvas id="renterSignaturePad" width="400" height="96" class="signature-canvas w-full h-24 rounded-lg bg-white border border-stone-300"></canvas>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="text-[11px] text-stone-500 block">Name in Blockschrift:</span>
+                <input type="text" id="renterSignName" class="w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" placeholder="Vor- & Nachname" />
+              </div>
+              <div>
+                <span class="text-[11px] text-stone-500 block">Ort, Datum:</span>
+                <input type="text" id="renterSignDate" class="w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" placeholder="Linz, TT.MM.JJJJ" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="no-print pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-3">
+          <p class="text-xs text-stone-500">
+            Nach dem Unterschreiben bitte auf <strong>„Als PDF speichern / drucken“</strong> klicken und das PDF an <strong>office@redsapata.com</strong> senden.
+          </p>
+          <button type="button" onclick="window.print()" class="bg-rose-700 hover:bg-rose-600 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition">
+            ✓ Vereinbarung abschließen &amp; als PDF speichern
+          </button>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <script>
+    // =========================================================================
+    // HIER EURE GOOGLE APPS SCRIPT WEB-APP URL (/exec) EINTRAGEN:
+    // =========================================================================
+    const APPS_SCRIPT_API_URL = 'https://script.google.com/macros/s/AKfycbzVQHV1D8c6OhsCspY1hlnjYiuycSUYDc1JOLKs0CLgtbuuBjdT9aaWelqJCwaiQfk/exec';
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 4500);
+    }
+
+    // 1. Preiskalkulation (Netto + USt = Brutto)
+    function updateGrossPrice() {
+      const net = parseFloat(document.getElementById('netPrice').value);
+      const vat = parseFloat(document.getElementById('vatRate').value) || 0;
+      const grossEl = document.getElementById('grossPrice');
+      if (!isNaN(net)) {
+        const gross = net * (1 + vat / 100);
+        grossEl.value = gross.toLocaleString('de-AT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      } else {
+        grossEl.value = '';
+      }
+    }
+    document.getElementById('netPrice').addEventListener('input', updateGrossPrice);
+    document.getElementById('vatRate').addEventListener('change', updateGrossPrice);
+
+    // 2. Volltext Klauseln ein-/ausklappen
+    document.getElementById('toggleClausesBtn').addEventListener('click', function () {
+      const box = document.getElementById('clausesFullText');
+      const isHidden = box.classList.contains('hidden');
+      box.classList.toggle('hidden');
+      this.textContent = isHidden ? 'Volltext ausblenden ▲' : 'Volltext einblenden ▼';
+    });
+
+    // 3. E-Mail Parser Drawer
+    document.getElementById('toggleParserBtn').addEventListener('click', () => {
+      document.getElementById('emailParserDrawer').classList.toggle('hidden');
+    });
+    document.getElementById('closeParserBtn').addEventListener('click', () => {
+      document.getElementById('emailParserDrawer').classList.add('hidden');
+    });
+
+    // 4. Unterschriftenfeld (Maus & Touch)
+    const canvas = document.getElementById('renterSignaturePad');
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#1c1917';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    let drawing = false;
+
+    function getCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+    canvas.addEventListener('mousedown', (e) => { drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+    canvas.addEventListener('mousemove', (e) => { if (!drawing) return; const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+    window.addEventListener('mouseup', () => { drawing = false; });
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!drawing) return; const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }, { passive: false });
+    canvas.addEventListener('touchend', () => { drawing = false; });
+    document.getElementById('clearSignatureBtn').addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    // 5. Daten in das Formular füllen
+    function applyStateToForm(data) {
+      if (!data || data.error) return;
+      if (data.bookingId) document.getElementById('contractNumber').value = data.bookingId;
+      if (data.renterOrg || data.renterName) document.getElementById('renterOrg').value = data.renterOrg || data.renterName;
+      if (data.renterName) {
+        document.getElementById('contactPerson').value = data.renterName;
+        document.getElementById('renterSignName').value = data.renterName;
+      }
+      if (data.renterEmail) document.getElementById('renterEmail').value = data.renterEmail;
+      if (data.renterPhone) document.getElementById('renterPhone').value = data.renterPhone;
+      if (data.renterAddress) document.getElementById('billingAddress').value = data.renterAddress;
+      if (data.purpose) document.getElementById('purpose').value = data.purpose;
+      if (data.pax) document.getElementById('maxPax').value = data.pax;
+      if (data.dateTime) document.getElementById('dateTime').value = data.dateTime;
+      if (data.rooms) {
+        document.getElementById('spaceDetails').value = data.rooms;
+        document.querySelectorAll('input[name="rooms"]').forEach(cb => {
+          if (data.rooms.toLowerCase().includes(cb.value.toLowerCase())) cb.checked = true;
+        });
+      }
+      if (data.netPrice) {
+        document.getElementById('netPrice').value = data.netPrice;
+        updateGrossPrice();
+      }
+      if (data.vatRate) {
+        document.getElementById('vatRate').value = data.vatRate;
+        updateGrossPrice();
+      }
+      if (data.paymentTerms) document.getElementById('paymentTerms').value = data.paymentTerms;
+      if (data.customTerms) document.getElementById('customTerms').value = data.customTerms;
+      if (data.customCancellation) document.getElementById('customCancellationNote').value = data.customCancellation;
+      if (data.category) {
+        const radio = document.querySelector(`input[name="cancellationType"][value="${data.category}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (data.redsapataRep) document.getElementById('redsapataRep').value = data.redsapataRep;
+      if (data.redsapataSignDate) document.getElementById('redsapataSignDate').value = 'Linz, ' + data.redsapataSignDate;
+    }
+
+    // Standard-Datum setzen
+    const todayStr = new Date().toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    document.getElementById('redsapataSignDate').value = 'Linz, ' + todayStr;
+    document.getElementById('renterSignDate').value = 'Linz, ' + todayStr;
+
+    // 6. Vertragsdaten per ?id=RS-2026-... von Google Apps Script abrufen
+    (async function loadBookingFromApi() {
+      const params = new URLSearchParams(window.location.search);
+      const bookingId = params.get('id');
+      if (!bookingId || APPS_SCRIPT_API_URL.includes('DEINE_WEBAPP_ID')) return;
+
+      const badge = document.getElementById('syncStatusBadge');
+      badge.textContent = 'Lade Vertragsdaten...';
+
+      try {
+        const response = await fetch(`${APPS_SCRIPT_API_URL}?id=${encodeURIComponent(bookingId)}`);
+        const data = await response.json();
+        if (data && !data.error) {
+          applyStateToForm(data);
+          badge.textContent = '✓ Synchronisiert (' + bookingId + ')';
+          showToast('Vertragsdaten für ' + bookingId + ' geladen.');
+        } else {
+          badge.textContent = 'ID nicht gefunden';
+        }
+      } catch (err) {
+        console.error('API-Abruf fehlgeschlagen:', err);
+        badge.textContent = 'Manueller Modus';
+      }
+    })();
+  </script>
+</body>
+</html>
