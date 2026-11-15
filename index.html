@@ -138,20 +138,22 @@
 
   <!-- Main Printable Contract Sheet -->
   <main class="max-w-4xl mx-auto px-3 sm:px-6 mt-6">
+
     <!-- Team-Bearbeitungs-Banner (nur sichtbar bei ?mode=edit) -->
-<div id="staffEditBanner" class="no-print hidden mb-4 bg-amber-100 border-2 border-amber-500 text-amber-950 p-4 rounded-2xl shadow-sm flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-  <div>
-    <div class="font-bold text-sm flex items-center gap-2">
-      <span>✎ Interner Prüf- &amp; Bearbeitungsmodus (RedSapata Team)</span>
+    <div id="staffEditBanner" class="no-print hidden mb-5 bg-amber-100 border-2 border-amber-500 text-amber-950 p-4 rounded-2xl shadow-md flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <div class="font-bold text-sm flex items-center gap-2">
+          <span>✎ Interner Prüf- &amp; Bearbeitungsmodus (RedSapata Team)</span>
+        </div>
+        <p class="text-xs text-amber-900 mt-0.5">
+          Prüfe und ergänze die ausgelesenen Felder. Klicke danach rechts auf den Button, um die Daten zu speichern und den <strong>Antwort-Entwurf an den/die Mieter:in</strong> in Gmail anzulegen.
+        </p>
+      </div>
+      <button type="button" id="saveAndCreateDraftBtn" class="bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-xl shadow transition shrink-0 cursor-pointer">
+        ✓ Speichern &amp; E-Mail-Entwurf erstellen
+      </button>
     </div>
-    <p class="text-xs text-amber-900 mt-0.5">
-      Prüfe und ergänze die ausgelesenen Felder. Klicke danach rechts auf den Button, um die Daten zu speichern und den <strong>Antwort-Entwurf an den/die Mieter:in</strong> in Gmail anzulegen.
-    </p>
-  </div>
-  <button type="button" id="saveAndCreateDraftBtn" class="bg-amber-600 hover:bg-amber-700 text-white text-xs sm:text-sm font-bold px-5 py-2.5 rounded-xl shadow transition shrink-0">
-    ✓ Speichern &amp; E-Mail-Entwurf erstellen
-  </button>
-</div>
+
     <form id="rentalAgreementForm" class="contract-sheet bg-white rounded-2xl shadow-sm border border-stone-200 p-6 sm:p-10 md:p-12 space-y-8">
 
       <!-- Contract Header -->
@@ -503,15 +505,15 @@
 
   <script>
     // =========================================================================
-    // HIER EURE GOOGLE APPS SCRIPT WEB-APP URL (/exec) EINTRAGEN:
+    // EURE GOOGLE APPS SCRIPT WEB-APP URL (/exec):
     // =========================================================================
-    const APPS_SCRIPT_API_URL = 'https://script.google.com/macros/s/AKfycby_4Sc09cuNZF_yUUzRxTEDQ4aLZFg9ulJnYiJKyFtz1r4opxJRowKuG6YPl7B1F66B/exec';
+    const APPS_SCRIPT_API_URL = 'https://script.google.com/macros/s/AKfycbzVQHV1D8c6OhsCspY1hlnjYiuycSUYDc1JOLKs0CLgtbuuBjdT9aaWelqJCwaiQfk/exec';
 
     function showToast(msg) {
       const toast = document.getElementById('toast');
       document.getElementById('toastMessage').textContent = msg;
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 4500);
+      setTimeout(() => toast.classList.add('hidden'), 5000);
     }
 
     // 1. Preiskalkulation (Netto + USt = Brutto)
@@ -523,183 +525,4 @@
         const gross = net * (1 + vat / 100);
         grossEl.value = gross.toLocaleString('de-AT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
       } else {
-        grossEl.value = '';
-      }
-    }
-    document.getElementById('netPrice').addEventListener('input', updateGrossPrice);
-    document.getElementById('vatRate').addEventListener('change', updateGrossPrice);
-
-    // 2. Volltext Klauseln ein-/ausklappen
-    document.getElementById('toggleClausesBtn').addEventListener('click', function () {
-      const box = document.getElementById('clausesFullText');
-      const isHidden = box.classList.contains('hidden');
-      box.classList.toggle('hidden');
-      this.textContent = isHidden ? 'Volltext ausblenden ▲' : 'Volltext einblenden ▼';
-    });
-
-    // 3. E-Mail Parser Drawer
-    document.getElementById('toggleParserBtn').addEventListener('click', () => {
-      document.getElementById('emailParserDrawer').classList.toggle('hidden');
-    });
-    document.getElementById('closeParserBtn').addEventListener('click', () => {
-      document.getElementById('emailParserDrawer').classList.add('hidden');
-    });
-
-    // 4. Unterschriftenfeld (Maus & Touch)
-    const canvas = document.getElementById('renterSignaturePad');
-    const ctx = canvas.getContext('2d');
-    ctx.strokeStyle = '#1c1917';
-    ctx.lineWidth = 2;
-    ctx.lineCap = 'round';
-    let drawing = false;
-
-    function getCoords(e) {
-      const rect = canvas.getBoundingClientRect();
-      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      return {
-        x: (clientX - rect.left) * (canvas.width / rect.width),
-        y: (clientY - rect.top) * (canvas.height / rect.height)
-      };
-    }
-    canvas.addEventListener('mousedown', (e) => { drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
-    canvas.addEventListener('mousemove', (e) => { if (!drawing) return; const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
-    window.addEventListener('mouseup', () => { drawing = false; });
-    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
-    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!drawing) return; const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }, { passive: false });
-    canvas.addEventListener('touchend', () => { drawing = false; });
-    document.getElementById('clearSignatureBtn').addEventListener('click', () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-    });
-
-    // 5. Daten in das Formular füllen
-    function applyStateToForm(data) {
-      if (!data || data.error) return;
-      if (data.bookingId) document.getElementById('contractNumber').value = data.bookingId;
-      if (data.renterOrg || data.renterName) document.getElementById('renterOrg').value = data.renterOrg || data.renterName;
-      if (data.renterName) {
-        document.getElementById('contactPerson').value = data.renterName;
-        document.getElementById('renterSignName').value = data.renterName;
-      }
-      if (data.renterEmail) document.getElementById('renterEmail').value = data.renterEmail;
-      if (data.renterPhone) document.getElementById('renterPhone').value = data.renterPhone;
-      if (data.renterAddress) document.getElementById('billingAddress').value = data.renterAddress;
-      if (data.purpose) document.getElementById('purpose').value = data.purpose;
-      if (data.pax) document.getElementById('maxPax').value = data.pax;
-      if (data.dateTime) document.getElementById('dateTime').value = data.dateTime;
-      if (data.rooms) {
-        document.getElementById('spaceDetails').value = data.rooms;
-        document.querySelectorAll('input[name="rooms"]').forEach(cb => {
-          if (data.rooms.toLowerCase().includes(cb.value.toLowerCase())) cb.checked = true;
-        });
-      }
-      if (data.netPrice) {
-        document.getElementById('netPrice').value = data.netPrice;
-        updateGrossPrice();
-      }
-      if (data.vatRate) {
-        document.getElementById('vatRate').value = data.vatRate;
-        updateGrossPrice();
-      }
-      if (data.paymentTerms) document.getElementById('paymentTerms').value = data.paymentTerms;
-      if (data.customTerms) document.getElementById('customTerms').value = data.customTerms;
-      if (data.customCancellation) document.getElementById('customCancellationNote').value = data.customCancellation;
-      if (data.category) {
-        const radio = document.querySelector(`input[name="cancellationType"][value="${data.category}"]`);
-        if (radio) radio.checked = true;
-      }
-      if (data.redsapataRep) document.getElementById('redsapataRep').value = data.redsapataRep;
-      if (data.redsapataSignDate) document.getElementById('redsapataSignDate').value = 'Linz, ' + data.redsapataSignDate;
-    }
-
-    // Standard-Datum setzen
-    const todayStr = new Date().toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric' });
-    document.getElementById('redsapataSignDate').value = 'Linz, ' + todayStr;
-    document.getElementById('renterSignDate').value = 'Linz, ' + todayStr;
-
-    // 6. Vertragsdaten per ?id=RS-2026-... von Google Apps Script abrufen
-    (async function loadBookingFromApi() // Bearbeitungsmodus (?mode=edit) aktivieren
-const urlParams = new URLSearchParams(window.location.search);
-const currentBookingId = urlParams.get('id');
-const isEditMode = urlParams.get('mode') === 'edit';
-
-if (isEditMode && currentBookingId) {
-  document.getElementById('staffEditBanner').classList.remove('hidden');
-}
-
-document.getElementById('saveAndCreateDraftBtn').addEventListener('click', async function () {
-  const btn = this;
-  btn.disabled = true;
-  btn.textContent = 'Wird gespeichert & Entwurf erstellt...';
-
-  const checkedRooms = [...document.querySelectorAll('input[name="rooms"]:checked')].map(cb => cb.value);
-  const spaceDetails = document.getElementById('spaceDetails').value.trim();
-  const selectedCat = document.querySelector('input[name="cancellationType"]:checked');
-
-  const updatedFormData = {
-    renterOrg: document.getElementById('renterOrg').value.trim(),
-    renterName: document.getElementById('contactPerson').value.trim(),
-    renterEmail: document.getElementById('renterEmail').value.trim(),
-    renterPhone: document.getElementById('renterPhone').value.trim(),
-    renterAddress: document.getElementById('billingAddress').value.trim(),
-    purpose: document.getElementById('purpose').value.trim(),
-    pax: document.getElementById('maxPax').value.trim(),
-    dateTime: document.getElementById('dateTime').value.trim(),
-    rooms: spaceDetails || checkedRooms.join(', '),
-    netPrice: document.getElementById('netPrice').value.trim(),
-    vatRate: document.getElementById('vatRate').value,
-    paymentTerms: document.getElementById('paymentTerms').value.trim(),
-    customTerms: document.getElementById('customTerms').value.trim(),
-    customCancellation: document.getElementById('customCancellationNote').value.trim(),
-    category: selectedCat ? selectedCat.value : 'veranstaltung',
-    redsapataRep: document.getElementById('redsapataRep').value.trim()
-  };
-
-  try {
-    const response = await fetch(APPS_SCRIPT_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({
-        bookingId: currentBookingId,
-        formData: updatedFormData
-      })
-    });
-    const resJson = await response.json();
-    if (resJson.success) {
-      btn.textContent = '✓ Entwurf in Gmail angelegt!';
-      btn.classList.replace('bg-amber-600', 'bg-emerald-700');
-      showToast('Gespeichert! Der E-Mail-Entwurf an den/die Mieter:in liegt jetzt in Gmail bereit.');
-    } else {
-      throw new Error(resJson.error || 'Unbekannter Fehler');
-    }
-  } catch (err) {
-    alert('Fehler beim Speichern: ' + err.message);
-    btn.disabled = false;
-    btn.textContent = '✓ Speichern & E-Mail-Entwurf erstellen';
-  }
-});{
-      const params = new URLSearchParams(window.location.search);
-      const bookingId = params.get('id');
-      if (!bookingId || APPS_SCRIPT_API_URL.includes('DEINE_WEBAPP_ID')) return;
-
-      const badge = document.getElementById('syncStatusBadge');
-      badge.textContent = 'Lade Vertragsdaten...';
-
-      try {
-        const response = await fetch(`${APPS_SCRIPT_API_URL}?id=${encodeURIComponent(bookingId)}`);
-        const data = await response.json();
-        if (data && !data.error) {
-          applyStateToForm(data);
-          badge.textContent = '✓ Synchronisiert (' + bookingId + ')';
-          showToast('Vertragsdaten für ' + bookingId + ' geladen.');
-        } else {
-          badge.textContent = 'ID nicht gefunden';
-        }
-      } catch (err) {
-        console.error('API-Abruf fehlgeschlagen:', err);
-        badge.textContent = 'Manueller Modus';
-      }
-    })();
-  </script>
-</body>
-</html>
+        grossEl
