@@ -267,3 +267,396 @@
         <div class="border-l-4 border-amber-500 bg-stone-50 p-4 rounded-r-xl space-y-3">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h3 class="text-xs sm:text-sm font-bold text-stone-900">Individuelle Absprachen aus dem E-Mail-Verlauf</h3>
+            <span class="email-badge">Vorrangig vor allgemeinen Bestimmungen</span>
+          </div>
+
+          <div>
+            <label for="customTerms" class="block text-xs font-semibold text-stone-700 mb-1">Vereinbarte Ausstattung, Logistik &amp; Sonderkonditionen:</label>
+            <textarea id="customTerms" rows="3" class="staff-only w-full text-xs sm:text-sm px-3 py-2 bg-white rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 2 -->
+      <section class="space-y-4 print-break-inside-avoid">
+        <div class="border-b border-stone-200 pb-2">
+          <h2 class="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs flex items-center justify-center font-bold">2</span>
+            Vereinbarte Mietkonditionen &amp; Stornobedingungen
+          </h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="einzeltermin" class="staff-only mt-0.5 text-rose-600" />
+            <div>
+              <div class="font-bold text-stone-900">Einzelterminbuchung (bis zu 4 Std.)</div>
+              <p class="text-stone-600 mt-0.5">Über 1 Woche vor Termin: kostenlos · 1 Woche bis 72 Std. davor: 75 % · unter 72 Std.: 100 %.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="veranstaltung" class="staff-only mt-0.5 text-rose-600" checked />
+            <div>
+              <div class="font-bold text-stone-900">Veranstaltungen (Ganztagesbuchung &gt; 4 Std.)</div>
+              <p class="text-stone-600 mt-0.5">Bis 6 Wochen davor: kostenlos · bis 4 Wochen: 50 % · bis 2 Wochen: 75 % · unter 2 Wochen: 100 %.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="serientermin" class="staff-only mt-0.5 text-rose-600" />
+            <div>
+              <div class="font-bold text-stone-900">Serientermine (regelmäßige Vermietung)</div>
+              <p class="text-stone-600 mt-0.5">+ 2 Wochen zu den Fristen „Veranstaltungen“; Einzelterminstorno: 50 % bis zu 24 Std. davor.</p>
+            </div>
+          </label>
+
+          <label class="flex items-start gap-2.5 p-3 rounded-xl border border-stone-200 bg-stone-50/60">
+            <input type="radio" name="cancellationType" value="custom" class="staff-only mt-0.5 text-rose-600" />
+            <div>
+              <div class="font-bold text-stone-900">Individuelle Stornoregelung (lt. E-Mail)</div>
+              <p class="text-stone-600 mt-0.5">Abweichende Regelung gemäß untenstehender E-Mail-Vereinbarung.</p>
+            </div>
+          </label>
+        </div>
+
+        <div>
+          <label for="customCancellationNote" class="block text-xs font-semibold text-stone-700 mb-1">Abweichende Storno- / Zusatzvereinbarung (optional)</label>
+          <input type="text" id="customCancellationNote" class="staff-only w-full text-xs sm:text-sm px-3 py-1.5 rounded-lg border border-stone-300 focus:border-rose-600 focus:outline-none" />
+        </div>
+      </section>
+
+      <!-- SECTION 3 -->
+      <section class="space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200 pb-2">
+          <h2 class="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs flex items-center justify-center font-bold">3</span>
+            Bedingungen, Vereinbarungen &amp; Hausordnung (Stand Jänner 2023)
+          </h2>
+          <button type="button" id="toggleClausesBtn" class="no-print text-xs font-semibold text-rose-700 hover:text-rose-900 bg-rose-50 px-3 py-1.5 rounded-lg border border-rose-200">
+            Volltext einblenden ▼
+          </button>
+        </div>
+
+        <div class="text-xs text-stone-600 bg-stone-50 p-3.5 rounded-xl border border-stone-200/80 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1.5">
+          <div>• <strong>A–B) Sorgfalt &amp; Reinigung:</strong> Besenreine/gereinigte Übergabe wie übernommen; eigene Müllentsorgung.</div>
+          <div>• <strong>C) Rauchverbot:</strong> Striktes Rauchverbot im Gebäude (Terrasse mit eigenem Aschenbecher).</div>
+          <div>• <strong>D–E) Genehmigungen &amp; Haftung:</strong> AKM, Behörden &amp; Versicherungsschutz obliegen dem/der Nutzer:in.</div>
+          <div>• <strong>F–I) Raumschutz &amp; Freistellung:</strong> Keine Veränderungen an Wand/Decke/Elektrik; Tanzböden ohne Straßenschuhe/Glas.</div>
+          <div>• <strong>J–I) Logo &amp; One-Voice-Policy:</strong> Kein RedSapata-Logo ohne Kooperation; positive gegenseitige Darstellung.</div>
+          <div>• <strong>Hausordnung (1–12):</strong> Ab 22:00 Uhr Fenster/Vorhänge schließen; ab 50 PAX Ordnungsdienst; kein Parken im Hof.</div>
+        </div>
+
+        <div id="clausesFullText" class="hidden text-[11.5px] text-stone-700 bg-stone-50/50 p-4 rounded-xl border border-stone-200 space-y-4 leading-relaxed">
+          <div class="space-y-1.5">
+            <h3 class="font-bold text-stone-900 uppercase tracking-wider text-xs">Bedingungen &amp; Vereinbarungen (A – J)</h3>
+            <p><strong>A)</strong> Der/die Benutzer:in verpflichtet sich, mit den Räumlichkeiten und den überlassenen Ausstattungsmitteln sorgfältig und rücksichtsvoll umzugehen, nur für den angezeigten Zweck zu nutzen, Schäden und Verluste zu vermeiden bzw. sämtliche Beeinträchtigungen an der Nutzungssache anzuzeigen und zu ersetzen.</p>
+            <p><strong>B)</strong> Der/die Benutzer:in übergibt die Räumlichkeiten und Ausstattungen im gereinigten und aufgeräumten Zustand, wie bei der Übernahme vorgefunden. Mitgebrachte Speisen und Getränkebehältnisse müssen selbst entsorgt werden.</p>
+            <p><strong>C)</strong> Innerhalb des Gebäudes ist ausdrückliches Rauchverbot! (Rauchen auf der Terrasse ist erlaubt – hier bitte selber um Aschenbecher kümmern.)</p>
+            <p><strong>D)</strong> Der/die Nutzer:in ist für sämtliche mit dieser Nutzung erforderlich werdenden Genehmigungen und Zulassungen selbst verantwortlich (Gemeinde, Ordnungsamt; Aufführungsgebühren, AKM, Künstlersozialkasse, usw.).</p>
+            <p><strong>E)</strong> Der/die Nutzer:in ist verantwortlich für die Sicherheit seiner Besucher und Gäste. RedSapata gewährt für die private Nutzung keinen Versicherungsschutz, dafür ist der Nutzer selbst verantwortlich.</p>
+            <p><strong>F)</strong> Grobe und für einen längeren Zeitraum bleibende Veränderungen müssen von RedSapata genehmigt werden (Bohren, Fixieren von Gegenständen an Deckenkonstruktion, Austauschen der Bodenbeläge, Bemalen der Wände). Für die Nutzung der Deckenkonstruktion sowie Veränderungen der Saalelektrik ist die Erlaubnis des Haustechnikers einzuholen. Der/die Nutzer:in übernimmt die volle Verantwortung für Schäden durch eigenes Equipment oder unsachgemäße Verwendung.</p>
+            <p><strong>G)</strong> RedSapata übernimmt keine Haftung für liegengebliebene Gegenstände und zwischengelagertes Eigentum der Nutzer:innen.</p>
+            <p><strong>H)</strong> RedSapata kann jederzeit von dieser Vereinbarung Abstand nehmen oder zurücktreten, wenn der/die Nutzer:in seine/ihre Verpflichtungen aus dieser Vereinbarung nicht erfüllt.</p>
+            <p><strong>I)</strong> Die Nutzer:in stellt RedSapata von Ansprüchen Dritter frei, die im Zusammenhang mit der Durchführung der Nutzung geltend gemacht werden.</p>
+            <p><strong>J)</strong> Im Falle von Kooperationen ist das Logo des Vereins in sämtlichen Veröffentlichungen anzuführen. Externe Raumnutzer:innen ohne Kooperationsvereinbarung benennen das Sonnenstein Loft ausschließlich als Austragungsort und nehmen von der Verwendung des Logos Abstand. One-Voice-Policy: Aktivitäten werden nur in beidseitigem Einvernehmen und in positiver gegenseitiger Darstellung nach außen getragen.</p>
+          </div>
+          <div class="space-y-1">
+            <h3 class="font-bold text-stone-900 uppercase tracking-wider text-xs">Hausordnung (Stand Jänner 2023)</h3>
+            <p>1. Raum ordentlich hinterlassen · 2. Tanzböden nicht mit Straßenschuhen betreten · 3. Generelles Rauchverbot · 4. Lichter &amp; Musikanlage abschalten, Fenster schließen, Türen verriegeln · 5. Geschirr spülen &amp; zurückstellen · 6. Mülltrennung beachten (Hof bzw. für Aubergine Ecke Hoppichlerstraße/Aubergstraße) · 7. Kein Glas im Tanzraum · 8. Ab 22 Uhr Fenster schließen &amp; Vorhänge zuziehen (Nachtruhe; Polizeieinsatzkosten trägt Veranstalter) · 9. Feuerlöscher &amp; Notausgänge vorab klären · 10. Ab 50 Personen Ordnungsdienst abstellen · 11. Parken im Hof nicht erlaubt · 12. Gesetzliche Maßnahmen einhalten.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: Signatures -->
+      <section class="space-y-5 print-break-inside-avoid pt-2">
+        <div class="border-b border-stone-200 pb-2">
+          <h2 class="text-base sm:text-lg font-bold text-stone-900 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-stone-900 text-white text-xs flex items-center justify-center font-bold">4</span>
+            Bestätigung &amp; Unterschriften
+          </h2>
+        </div>
+
+        <div class="space-y-2 text-xs text-stone-700 bg-rose-50/40 p-3.5 rounded-xl border border-rose-200/60">
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="acceptTerms" required class="mt-0.5 rounded text-rose-600" />
+            <span>Ich habe die allgemeinen Nutzungsbedingungen, Stornobedingungen und die Hausordnung (Stand Jänner 2023) gelesen und akzeptiere diese verbindlich. *</span>
+          </label>
+          <label class="flex items-start gap-2.5 cursor-pointer">
+            <input type="checkbox" id="acceptEmailTerms" required class="mt-0.5 rounded text-rose-600" />
+            <span>Die unter Punkt 1 zusammengefassten individuellen Absprachen aus dem E-Mail-Verlauf entsprechen unserer Vereinbarung. *</span>
+          </label>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div class="bg-stone-50 p-4 rounded-xl border border-stone-200 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-stone-700">Für RedSapata Kulturinitiative</span>
+                <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">✓ Digital freigegeben</span>
+              </div>
+              <div class="h-24 rounded-lg bg-white border border-stone-200 flex flex-col items-center justify-center px-4 text-center">
+                <div class="font-title-brand italic text-xl text-rose-800 tracking-tight">RedSapata Kulturinitiative</div>
+                <div class="text-[11px] text-stone-500 mt-0.5">Elektronisch autorisiert &amp; versendet über office@redsapata.com</div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="text-[11px] text-stone-500 block">Ausgestellt durch:</span>
+                <input type="text" id="redsapataRep" value="Ulrike Hager / RedSapata Team" class="staff-only w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" />
+              </div>
+              <div>
+                <span class="text-[11px] text-stone-500 block">Ort, Datum:</span>
+                <input type="text" id="redsapataSignDate" class="staff-only w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" />
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-stone-50 p-4 rounded-xl border border-stone-300 flex flex-col justify-between space-y-3">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-xs font-bold uppercase tracking-wider text-stone-900">Für Mieter:in / Veranstalter:in *</span>
+                <button type="button" id="clearSignatureBtn" class="no-print text-[11px] text-stone-500 hover:text-rose-700 underline">Löschen</button>
+              </div>
+              <canvas id="renterSignaturePad" width="400" height="96" class="signature-canvas w-full h-24 rounded-lg bg-white border border-stone-300"></canvas>
+            </div>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <span class="text-[11px] text-stone-500 block">Name in Blockschrift:</span>
+                <input type="text" id="renterSignName" class="w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" placeholder="Vor- & Nachname" />
+              </div>
+              <div>
+                <span class="text-[11px] text-stone-500 block">Ort, Datum:</span>
+                <input type="text" id="renterSignDate" class="w-full font-medium text-stone-800 bg-transparent border-b border-stone-300 focus:outline-none py-0.5" placeholder="Linz, TT.MM.JJJJ" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div class="no-print pt-4 border-t border-stone-200 flex flex-wrap items-center justify-between gap-3">
+          <p id="bottomHelperText" class="text-xs text-stone-500">
+            Nach dem Unterschreiben bitte auf <strong>„Als PDF speichern / drucken“</strong> klicken und das PDF an <strong>office@redsapata.com</strong> senden.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" id="bottomStaffSaveBtn" class="save-draft-trigger hidden bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition cursor-pointer">
+              ✓ Speichern &amp; E-Mail-Entwurf erstellen
+            </button>
+            <button type="button" onclick="window.print()" class="bg-rose-700 hover:bg-rose-600 text-white text-sm font-bold px-6 py-2.5 rounded-xl shadow-md transition">
+              ✓ Vereinbarung abschließen &amp; als PDF speichern
+            </button>
+          </div>
+        </div>
+      </section>
+    </form>
+  </main>
+
+  <script>
+    // =========================================================================
+    // HIER EURE AKTUELLE GOOGLE APPS SCRIPT WEB-APP URL (/exec) EINTRAGEN:
+    // =========================================================================
+    const APPS_SCRIPT_API_URL = 'https://script.google.com/macros/s/AKfycbzVQHV1D8c6OhsCspY1hlnjYiuycSUYDc1JOLKs0CLgtbuuBjdT9aaWelqJCwaiQfk/exec';
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMessage').textContent = msg;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 6000);
+    }
+
+    function updateGrossPrice() {
+      const net = parseFloat(document.getElementById('netPrice').value);
+      const vat = parseFloat(document.getElementById('vatRate').value) || 0;
+      const grossEl = document.getElementById('grossPrice');
+      if (!isNaN(net)) {
+        const gross = net * (1 + vat / 100);
+        grossEl.value = gross.toLocaleString('de-AT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+      } else {
+        grossEl.value = '';
+      }
+    }
+    document.getElementById('netPrice').addEventListener('input', updateGrossPrice);
+    document.getElementById('vatRate').addEventListener('change', updateGrossPrice);
+
+    document.getElementById('toggleClausesBtn').addEventListener('click', function () {
+      const box = document.getElementById('clausesFullText');
+      const isHidden = box.classList.contains('hidden');
+      box.classList.toggle('hidden');
+      this.textContent = isHidden ? 'Volltext ausblenden ▲' : 'Volltext einblenden ▼';
+    });
+
+    // Unterschriftenfeld
+    const canvas = document.getElementById('renterSignaturePad');
+    const ctx = canvas.getContext('2d');
+    ctx.strokeStyle = '#1c1917';
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    let drawing = false;
+
+    function getCoords(e) {
+      const rect = canvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return {
+        x: (clientX - rect.left) * (canvas.width / rect.width),
+        y: (clientY - rect.top) * (canvas.height / rect.height)
+      };
+    }
+    canvas.addEventListener('mousedown', (e) => { drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); });
+    canvas.addEventListener('mousemove', (e) => { if (!drawing) return; const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); });
+    window.addEventListener('mouseup', () => { drawing = false; });
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); drawing = true; const p = getCoords(e); ctx.beginPath(); ctx.moveTo(p.x, p.y); }, { passive: false });
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); if (!drawing) return; const p = getCoords(e); ctx.lineTo(p.x, p.y); ctx.stroke(); }, { passive: false });
+    canvas.addEventListener('touchend', () => { drawing = false; });
+    document.getElementById('clearSignatureBtn').addEventListener('click', () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    });
+
+    function applyStateToForm(data) {
+      if (!data || data.error) return;
+      if (data.bookingId) document.getElementById('contractNumber').value = data.bookingId;
+      if (data.renterOrg || data.renterName) document.getElementById('renterOrg').value = data.renterOrg || data.renterName;
+      if (data.renterName) {
+        document.getElementById('contactPerson').value = data.renterName;
+        document.getElementById('renterSignName').value = data.renterName;
+      }
+      if (data.renterEmail) document.getElementById('renterEmail').value = data.renterEmail;
+      if (data.renterPhone) document.getElementById('renterPhone').value = data.renterPhone;
+      if (data.renterAddress) document.getElementById('billingAddress').value = data.renterAddress;
+      if (data.purpose) document.getElementById('purpose').value = data.purpose;
+      if (data.pax) document.getElementById('maxPax').value = data.pax;
+      if (data.dateTime) document.getElementById('dateTime').value = data.dateTime;
+      if (data.rooms) {
+        document.getElementById('spaceDetails').value = data.rooms;
+        document.querySelectorAll('input[name="rooms"]').forEach(cb => {
+          if (data.rooms.toLowerCase().includes(cb.value.toLowerCase())) cb.checked = true;
+        });
+      }
+      if (data.netPrice) {
+        document.getElementById('netPrice').value = data.netPrice;
+        updateGrossPrice();
+      }
+      if (data.vatRate) {
+        document.getElementById('vatRate').value = data.vatRate;
+        updateGrossPrice();
+      }
+      if (data.paymentTerms) document.getElementById('paymentTerms').value = data.paymentTerms;
+      if (data.customTerms) document.getElementById('customTerms').value = data.customTerms;
+      if (data.customCancellation) document.getElementById('customCancellationNote').value = data.customCancellation;
+      if (data.category) {
+        const radio = document.querySelector(`input[name="cancellationType"][value="${data.category}"]`);
+        if (radio) radio.checked = true;
+      }
+      if (data.redsapataRep) document.getElementById('redsapataRep').value = data.redsapataRep;
+      if (data.redsapataSignDate) document.getElementById('redsapataSignDate').value = 'Linz, ' + data.redsapataSignDate;
+    }
+
+    // Im Kundenmodus (ohne ?mode=edit) alle Vertragskonditionen verbindlich sperren
+    function lockContractFieldsForCustomer() {
+      document.getElementById('contractNumber').readOnly = true;
+      document.querySelectorAll('.staff-only').forEach(el => {
+        if (el.type === 'checkbox' || el.type === 'radio' || el.tagName === 'SELECT') {
+          el.disabled = true;
+        } else {
+          el.readOnly = true;
+        }
+        el.classList.add('locked-field');
+      });
+    }
+
+    const todayStr = new Date().toLocaleDateString('de-AT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    document.getElementById('redsapataSignDate').value = 'Linz, ' + todayStr;
+    document.getElementById('renterSignDate').value = 'Linz, ' + todayStr;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const currentBookingId = urlParams.get('id');
+    const isEditMode = urlParams.get('mode') === 'edit';
+
+    if (isEditMode && currentBookingId) {
+      document.getElementById('staffEditBanner').classList.remove('hidden');
+      document.getElementById('bottomStaffSaveBtn').classList.remove('hidden');
+      document.getElementById('bottomHelperText').innerHTML = 'Alle Angaben geprüft? Klicke rechts auf <strong>„✓ Speichern &amp; E-Mail-Entwurf erstellen“</strong>, um den Kunden-Entwurf in Gmail anzulegen.';
+    } else if (currentBookingId) {
+      lockContractFieldsForCustomer();
+    }
+
+    (async function loadBookingFromApi() {
+      if (!currentBookingId) return;
+      const badge = document.getElementById('syncStatusBadge');
+      badge.textContent = 'Lade Vertragsdaten...';
+
+      try {
+        const response = await fetch(`${APPS_SCRIPT_API_URL}?id=${encodeURIComponent(currentBookingId)}`);
+        const data = await response.json();
+        if (data && !data.error) {
+          applyStateToForm(data);
+          badge.textContent = isEditMode ? '✎ Bearbeitungsmodus (' + currentBookingId + ')' : '✓ Verbindliche Vereinbarung (' + currentBookingId + ')';
+          showToast('Vertragsdaten für ' + currentBookingId + ' geladen.');
+        } else {
+          badge.textContent = 'ID nicht gefunden';
+        }
+      } catch (err) {
+        console.error('API-Abruf fehlgeschlagen:', err);
+        badge.textContent = 'Verbindungsfehler zur API';
+        alert('Die Vertragsdaten konnten nicht von Google Apps Script geladen werden. Bitte prüfe in Google Apps Script, ob die Web-App auf Zugriff: "Jeder" steht und die aktuelle /exec-URL in index.html eingetragen ist.');
+      }
+    })();
+
+    // Speicher-Logik für beide Team-Buttons (oben und unten)
+    document.querySelectorAll('.save-draft-trigger').forEach(btn => {
+      btn.addEventListener('click', async function () {
+        const allBtns = document.querySelectorAll('.save-draft-trigger');
+        allBtns.forEach(b => { b.disabled = true; b.textContent = 'Wird gespeichert & Entwurf erstellt...'; });
+
+        const checkedRooms = [...document.querySelectorAll('input[name="rooms"]:checked')].map(cb => cb.value);
+        const spaceDetails = document.getElementById('spaceDetails').value.trim();
+        const selectedCat = document.querySelector('input[name="cancellationType"]:checked');
+
+        const updatedFormData = {
+          renterOrg: document.getElementById('renterOrg').value.trim(),
+          renterName: document.getElementById('contactPerson').value.trim(),
+          renterEmail: document.getElementById('renterEmail').value.trim(),
+          renterPhone: document.getElementById('renterPhone').value.trim(),
+          renterAddress: document.getElementById('billingAddress').value.trim(),
+          purpose: document.getElementById('purpose').value.trim(),
+          pax: document.getElementById('maxPax').value.trim(),
+          dateTime: document.getElementById('dateTime').value.trim(),
+          rooms: spaceDetails || checkedRooms.join(', '),
+          netPrice: document.getElementById('netPrice').value.trim(),
+          vatRate: document.getElementById('vatRate').value,
+          paymentTerms: document.getElementById('paymentTerms').value.trim(),
+          customTerms: document.getElementById('customTerms').value.trim(),
+          customCancellation: document.getElementById('customCancellationNote').value.trim(),
+          category: selectedCat ? selectedCat.value : 'veranstaltung',
+          redsapataRep: document.getElementById('redsapataRep').value.trim()
+        };
+
+        try {
+          const response = await fetch(APPS_SCRIPT_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              bookingId: currentBookingId,
+              formData: updatedFormData
+            })
+          });
+          const resJson = await response.json();
+          if (resJson.success) {
+            allBtns.forEach(b => {
+              b.textContent = '✓ Entwurf in Gmail angelegt!';
+              b.classList.remove('bg-amber-600', 'hover:bg-amber-700');
+              b.classList.add('bg-emerald-700');
+            });
+            showToast('Gespeichert! Der E-Mail-Entwurf für den/die Mieter:in liegt jetzt in Gmail bereit.');
+          } else {
+            throw new Error(resJson.error || 'Unbekannter Fehler');
+          }
+        } catch (err) {
+          alert('Fehler beim Speichern: ' + err.message);
+          allBtns.forEach(b => { b.disabled = false; b.textContent = '✓ Speichern & E-Mail-Entwurf erstellen'; });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
